@@ -23,6 +23,14 @@ A primeira vez leva alguns minutos (baixa as imagens e compila a API). Depois so
 No celular, toque em **Configurar servidor** no app e informe o endereço.
 Se não conectar, libere o Docker/Java no Firewall do Windows em **Redes privadas**.
 
+### Usando o roteador/hotspot do celular
+Funciona igual a uma Wi-Fi: ligue o hotspot num celular e conecte nele o **computador** e o outro celular.
+- A API continua rodando no computador. Nos celulares, use o IP do computador nessa rede
+  (no hotspot do Android costuma ser `192.168.x.x`; no do iPhone, `172.20.10.x`).
+- O Windows costuma marcar o hotspot como rede **Pública**, e aí o firewall bloqueia a porta 8080.
+  Em *Configurações → Rede e Internet → (a rede do hotspot) → Perfil de rede*, escolha **Privada**.
+- O IP muda quando você reconecta; rode o `iniciar.bat` de novo para ver o atual.
+
 ## Outros comandos
 - Parar: `servidor-local\parar.bat` ou `docker compose down`
 - Ver logs da API: `docker compose logs -f api`

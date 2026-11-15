@@ -19,7 +19,9 @@ echo ===========================================================
 echo  API no ar!
 echo  Navegador (este PC):  http://localhost:8080
 echo  Emulador Android:     http://10.0.2.2:8080
-for /f "usebackq delims=" %%i in (`powershell -NoProfile -Command "(Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.IPAddress -notmatch '^(127|169\.254|172\.)' -and $_.PrefixOrigin -ne 'WellKnown' } | Select-Object -First 1).IPAddress"`) do echo  Celular (mesma Wi-Fi): http://%%i:8080
+for /f "usebackq delims=" %%i in (`powershell -NoProfile -Command "Get-NetIPConfiguration | Where-Object { $_.IPv4DefaultGateway -and $_.NetAdapter.Status -eq 'Up' } | ForEach-Object { $_.IPv4Address.IPAddress }"`) do echo  Celular (mesma rede): http://%%i:8080
+echo.
+echo  Se o celular nao conectar: Configuracoes do Windows ^> Rede ^> marque a rede como PRIVADA
 echo ===========================================================
 start http://localhost:8080
 pause
