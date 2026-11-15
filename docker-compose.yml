@@ -1,0 +1,41 @@
+# Educa+ - servidor local (MySQL 8 + API Spring Boot)
+# Uso: docker compose up -d --build   ->   http://localhost:8080
+services:
+  banco:
+    image: mysql:8.0
+    container_name: educamais-banco
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234"
+      TZ: America/Sao_Paulo
+    # Força UTF-8 para os acentos dos scripts não virarem "adiÃ§Ã£o"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --skip-character-set-client-handshake
+    ports:
+      - "3306:3306"
+    volumes:
+      # Na primeira subida roda 01_schema.sql e 02_dados_demo.sql (o .py é ignorado)
+      - ./banco:/docker-entrypoint-initdb.d:ro
+      - dados-mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysql -uroot -p1234 -e 'SELECT COUNT(*) FROM educa_mais.realizacao_atividade' >/dev/null 2>&1"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 20s
+
+  api:
+    build: ./api
+    container_name: educamais-api
+    depends_on:
+      banco:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://banco:3306/educa_mais?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8"
+      DB_USER: root
+      DB_PASS: "1234"
+      TZ: America/Sao_Paulo
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  dados-mysql:
