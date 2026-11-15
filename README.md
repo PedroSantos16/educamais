@@ -19,6 +19,14 @@
   <img src="docs/img/coordenacao-01-painel.png" width="150" alt="Painel da escola">
 </p>
 
+## Vídeo de demonstração
+
+<p align="center">
+  <a href="https://youtu.be/83a6GjLp5xM">
+    <img src="https://img.youtube.com/vi/83a6GjLp5xM/maxresdefault.jpg" width="600" alt="Assista ao vídeo de demonstração do Educa+ no YouTube">
+  </a>
+</p>
+
 ## Sobre o projeto
 
 O Educa+ é um aplicativo Android em que o aluno aprende jogando: cada disciplina é uma ilha, cada ilha tem uma trilha de níveis e um tutor (o **Tico**) acompanha o aluno durante as partidas. Quando o aluno erra repetidamente a mesma habilidade, o sistema detecta a dificuldade, adapta os próximos desafios e avisa o professor.
