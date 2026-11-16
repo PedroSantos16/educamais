@@ -1,0 +1,11 @@
+# Blueprint do Render: New + > Blueprint > escolha este repositório
+services:
+  - type: web
+    name: educamais
+    runtime: docker
+    plan: free
+    region: virginia
+    dockerfilePath: ./Dockerfile.render
+    dockerContext: .
+    healthCheckPath: /api/auth/contas-teste
+    autoDeploy: true

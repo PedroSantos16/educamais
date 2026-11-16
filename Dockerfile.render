@@ -1,0 +1,24 @@
+# Educa+ no Render: API Spring Boot + MySQL no mesmo container (plano gratuito)
+FROM maven:3.9-eclipse-temurin-17 AS build
+WORKDIR /src
+COPY api/pom.xml .
+RUN mvn -q -B dependency:go-offline
+COPY api/src ./src
+RUN mvn -q -B -DskipTests package
+
+FROM eclipse-temurin:17-jre-jammy
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends mysql-server-8.0 \
+ && rm -rf /var/lib/apt/lists/* /var/lib/mysql/*
+COPY render/my.cnf /etc/mysql/conf.d/educa.cnf
+COPY banco /app/banco
+COPY render/iniciar-render.sh /app/iniciar-render.sh
+COPY --from=build /src/target/*.jar /app/app.jar
+ENV DB_USER=root \
+    DB_PASS=educamais \
+    SPRING_DATASOURCE_URL="jdbc:mysql://127.0.0.1:3306/educa_mais?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8" \
+    SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE=4 \
+    SERVER_TOMCAT_THREADS_MAX=20 \
+    TZ=America/Sao_Paulo
+EXPOSE 8080
+CMD ["/app/iniciar-render.sh"]
